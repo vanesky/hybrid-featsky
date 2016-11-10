@@ -1,0 +1,75 @@
+@charset "utf-8";
+
+@cf:#fff;@cf2:#f2f2f2;@ceb:#ebebeb;
+@cdb:#dbdbdb;@cc:#ccc;@c3:#333;
+@c6:#666;@c9:#999;@c10:#101010;
+@a:#49A0DB;
+@ba:#49A0DB;
+
+.container{
+  top:100px;
+  overflow: hidden;
+}
+
+  .nav-tit{
+    position: fixed;
+    top:50px;
+    height:40px;
+    width:100%;
+    z-index: 8;
+    text-align: center;
+    //border-bottom:1px solid @ceb;
+    box-shadow:0 1px 1px .5px @ceb;
+    background-color:@cf;
+    .nav-item{
+      font-size:16px;
+      width:50%;
+      margin:0 auto;
+      .item-list{
+        width:50px;
+        height:40px;
+        .list-tit{
+          margin-top: 9px;
+        }
+        .list-line{
+          margin:0 auto;
+          margin-top: 8px;
+          height:3px;
+          width:40px;
+        }
+      }
+    }
+  }
+
+  //图片列表
+
+  .img-list{
+    float:left;
+    margin-top: 2px;
+
+    overflow:hidden;
+    background-size:cover;
+    background-position:top center;
+    //background-image: url("../../img/0.jpg");
+  }
+
+
+
+  //图片列表
+  #channel-latest{
+    margin-bottom:2rem;
+
+    //日期头部
+    .date-tit{
+      padding:2rem 0 1rem 0.5rem;
+      &:first-child{
+        padding-top:0;
+      }
+    }
+  }
+
+  //图片全部列表
+  #channel-all{
+    position: relative;
+  }
+

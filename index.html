@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FEATSKY Best-1.0</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="featsky,featsky博客,641151096"/>
+    <meta name="description" content="featsky的个人博客,641151096的个人博客"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="stylesheet" href="component/prompt/com-prompt.css">
+</head>
+<body>
+
+    <header>
+        <img id="logo" src="img/fixed/logo.png" alt="">
+        <ul class="menu-list fx-col-b">
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </header>
+
+    <div class="container">
+
+        <section id="banner">
+            <img data-name="bannerPath" class="bannerImg show" src="" alt="">
+        </section>
+
+        <!--资料信息模块-->
+        <section id="main-sign">
+            <ul class="w90 clearfix">
+                <li class="fl"><img class="head-img" src="img/head.jpg" alt=""></li>
+                <li class="sign-top fl">
+                    <h2>Tekapo</h2>
+                    <span class="fl"></span>
+                    <ul class="sign-text fl">
+                        <li data-name="text" class="li-text">暂无数据</li>
+                        <li data-name="time" class="li-text">0</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!--留言模块-->
+        <section id="leaving">
+            <ul class="leaving-main">
+                <li class="leaving-mes fx-row-a fl">
+                    <a href="message.html" target="_self" class="mr20">
+                    <img class="img-edit va-c" src="img/fixed/edit.png" alt="">
+                    <span class="fr10 fw c6 ml20">Leaving a message</span>
+                    </a>
+                </li>
+                <a href="tel:18092828092" class="cf">
+                <li class="call fr">
+                    M
+                </li>
+                </a>
+            </ul>
+        </section>
+
+        <!--计数模块-->
+        <ul id="count" class="fx-row-b">
+            <li class="fx-g">
+                <a href="article.html" target="_self">
+                <h3 data-name="artCount">0</h3>
+                <p>Article</p>
+                </a>
+            </li>
+            <li class="fx-g">
+                <a href="movie.html" target="_self">
+                <h3 data-name="movieCount">0</h3>
+                <p>Movie</p>
+                </a>
+            </li>
+            <li class="fx-g">
+                <a href="photo.html" target="_self">
+                <h3 data-name="imgCount">0</h3>
+                <p>Picture</p>
+                </a>
+            </li>
+            <li class="fx-g">
+                <a href="say.html" target="_self">
+                <h3 data-name="sayCount">0</h3>
+                <p>History</p>
+                </a>
+            </li>
+        </ul>
+
+        <!--最新图片-->
+        <section id="latest">
+            <!--图片头部-->
+            <ul class="w90 fx-row-b">
+                <li>
+                    <h3 data-name="time"></h3>
+                    <p class="c9">最近更新</p>
+                </li>
+                <a href="photo.html" target="_self">
+                <li class="fx-row-b poss-more">
+                    <div class="more"></div>
+                    <div class="more"></div>
+                    <div class="more"></div>
+                </li>
+                </a>
+            </ul>
+
+            <!--图片列表-->
+            <ul class="latest-item fx-row-b">
+                <li class="list-box"></li>
+                <li class="list-box"></li>
+                <li class="list-box"></li>
+                <li class="list-box"></li>
+            </ul>
+        </section>
+
+        <!--文章模块-->
+        <section id="main-article">
+            <div class="art">
+                <div data-name="imgPath" class="img-box bg-fill"></div>
+                <h4 data-name="title" class="fw mt10">关于火控系统</h4>
+                <div data-name="text" class="art-text">
+
+                </div>
+                <ul class="w90">
+                    <a href="article.html" target="_self">
+                    <li class="pos-more fx-col-b">
+                        <div class="more"></div>
+                        <div class="more"></div>
+                        <div class="more"></div>
+                    </li></a>
+                    <li data-name="id" class="checked">查看</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!--查看图片组件-->
+    <section class="banner-img">
+        <div id="header-bg">
+            <img class="back" src="img/fixed/arrow.png" alt="">
+            <p id="header-title"><span id="title-grade"></span>/<span id="title-grades"></span></p>
+        </div>
+
+        <ul class="banner-img-main">
+            <!--列表-->
+        </ul>
+    </section>
+    <!--***********图片组件子列表模板*************-->
+    <div id="model-2" class="hide">
+        <li class="banner-list fx-col-c"><img src="" alt=""></li>
+    </div>
+    <!--*****************************************-->
+
+    <script src="src/lib/appcan.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="component/prompt/com_prompt.js"></script>
+    <script src="src/js/ajax.js"></script>
+    <script>
+
+        appcan.ready(function(){
+
+            var w = JSON.parse(localStorage.getItem('device'));
+
+            $('#art-item').css('height', w.h + 'px');
+
+            //RENDER***********************************************************
+            app.ajax('get',app.url('getIndexData.php'),{},function(data){
+
+                var obj = data;
+                
+                //banner数据
+                $("[data-name='bannerPath']").prop('src',app.imgUrl(obj.bannerPath));
+
+                //计数数据
+                var countObj = $('#count');
+
+                for(var i in obj.count){
+
+                    countObj.find("[data-name='"+i+"']").text(obj.count[i])
+
+                }
+
+                //相册数据
+                var listObj = $('.list-box');
+
+                listObj.css('height',listObj.css('width'));
+
+                for(var j=0;j<obj.imgArrPath.length;j++){
+
+                    if(j==0){
+
+                        $('#latest').find("[data-name='time']").text(obj.imgArrPath[j].time);
+
+                    }
+
+                    listObj.eq(j).css('background-image','url('+app.imgUrl('photo/'+obj.imgArrPath[j].imgPath)+')').attr('data-id',obj.imgArrPath[j].id);
+
+                }
+
+                //说说数据sign-text
+                var liTextObj = $('#main-sign');
+
+                liTextObj.find("[data-name='text']").text(obj.sayObj.text);
+
+                liTextObj.find("[data-name='time']").text(obj.sayObj.time);
+
+                //文章数据
+                var artObj = $('#main-article');
+
+                //artObj.find("[data-name='imgPath']").prop('src','img/'+obj.articleObj.imgPath);
+
+                artObj.find(".checked").attr('data-id',obj.articleObj.id);
+
+                artObj.find("[data-name='imgPath']").css('background-image','url('+app.imgUrl('art/'+obj.articleObj.imgPath)+')');
+
+                artObj.find("[data-name='title']").text(obj.articleObj.title);
+
+                artObj.find("[data-name='text']").text(obj.articleObj.text);  artObj.find("[data-name='text']").text(obj.articleObj.text);
+
+            },1);
+
+            //OVER**********************************************************************
+
+            //文章查看
+            $('.checked').on('tap',function(){
+                
+                var id = $(this).attr('data-id');
+        
+                localStorage.setItem('artcleId',id);
+
+                appcan.window.open({
+                     
+                    name:'article_detail',
+                     
+                    data:'article_detail.html',
+                     
+                    dataType:'0',
+                     
+                    aniId:"2",
+                    
+                    type:'256',
+                    
+                    animDuration:"200"
+                                                              
+                });
+
+            })
+
+            //==========================================================
+
+
+            //页面图片列表事件
+            $('.latest-item').on('tap','.list-box',function(){
+                //最近|全部
+                
+                var imgArrPath = [];
+                
+                var pageImgObj = $('.latest-item').find('.list-box');
+                
+                pageImgObj.each(function(index,obj){
+                    
+                    imgArrPath.push($(obj).css('backgroundImage').match(/http.+(jpg)|(png)/)[0])
+                    
+                })
+                
+                var nowIdex = $(this).index();
+
+                var dataImg ={
+                    displayActionButton:false,
+                    displayNavArrows:true,
+                    enableGrid:true,
+                    //startOnGrid:true,
+                    startIndex:nowIdex,
+                    data:imgArrPath
+                    };
+
+                var jsonImg=JSON.stringify(dataImg);
+                    uexImage.openBrowser(jsonImg);                
+                
+                //com.pageImageEvent(pageImgObj,this,bimObj,$('.banner-img'));
+
+            });
+            
+            //==================================================================================
+            localStorage.setItem('winName','index');
+          
+      
+        })        
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

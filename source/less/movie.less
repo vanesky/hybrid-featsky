@@ -1,0 +1,96 @@
+@charset "utf-8";
+
+@cf:#fff;@cf2:#f2f2f2;@ceb:#ebebeb;
+@cdb:#dbdbdb;@cc:#ccc;@c3:#333;
+@c6:#666;@c9:#999;@c10:#101010;
+@a:#49A0DB;
+@ba:#49A0DB;
+
+
+.container{
+  background-color: @cf2;
+}
+  //视频列表Li
+  #movie-item{
+    .movie-list{
+      position: relative;
+      margin:0 auto;
+      margin-bottom:.8rem;
+      width:100%;
+      height:18.5rem;
+      overflow: hidden;
+      .movie-content{
+        width:100%;
+        height:15rem;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+      //透明色遮罩
+      .movie-mask{
+        position: absolute;
+        width:100%;
+        height:15rem;
+        top:0px;
+        left:0px;
+        background: linear-gradient(rgba(204,204,204,0.2),rgba(16,16,16,0.8));
+        z-index: 2;
+
+        //描述文字
+        .summary{
+          position: absolute;
+          color:@cf;
+          top: 90%;
+          transform: translateY(-100%);
+          width:100%;
+
+          .detail-text{
+            margin-left: 1.5rem;
+            width:55%;
+            font-size: 1rem;
+            margin-top:.5rem;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+
+      }
+      .movie-box{
+        height:3.5rem;
+        background-color: @cf;
+        line-height: 3.5rem;
+
+        .box-text{
+          margin-left:1.5rem;
+        }
+      }
+      //movie-list over
+    }
+  }
+
+  .com-movie-detail{
+    position: fixed;
+    height:100%;
+    width:100%;
+    top:0;
+    left:100%;
+    background-color: @cf;
+    z-index: 12;
+    transform: translateX(0%);
+    transition:transform 0.4s;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+

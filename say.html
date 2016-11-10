@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FEATSKY Best-1.0</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="featsky,featsky博客,641151096"/>
+    <meta name="description" content="featsky的个人博客,641151096的个人博客"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/say.css">
+    <link rel="stylesheet" href="component/prompt/com-prompt.css">
+</head>
+<body>
+
+    <header>
+        <!--<img id="logo" src="img/logo.png" alt="">-->
+        <ul class="menu-list fx-col-b">
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <h4 class="titles">说说</h4>
+    </header>
+
+    <div class="container">
+
+        <div class="load-button">查看更多</div>
+    </div>
+
+    <!--模板列表-->
+    <div id="model-1" class="hide">
+        <section class="say">
+            <div class="w90">
+                <div class="say-tit clearfix">
+                    <div data-name="headPath" class="img-head bg-fill dp-ib va-c"></div>
+                    <div class="dp-ib va-c">
+                        <h4 data-name="name">Featsky</h4>
+                        <p data-name="time" class="fr10 c9 mt1">2016-02-15</p>
+                    </div>
+                </div>
+
+                <p data-name="text" class="p-text">fsdfdsf的是方法反反复复反复反复反复即将于Yuiu意义</p>
+                <ul data-name="imgArrPath" class="img-item clearfix">
+                    <!--列表图片(子模板)-->
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!--列表图片(子模板)-->
+    <div id="model-1-a" class="hide">
+        <li data-name="imgList" class="img-list bg-fill fl"><!--<img src="" alt="">--></li>
+    </div>
+
+    <script src="src/lib/appcan.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="component/prompt/com_prompt.js"></script>
+    <script src="component/load/load.js"></script>
+    <script src="src/js/ajax.js"></script>
+
+    <script>
+        $(function(){
+
+            var pageResult = 0,pageCount = 2;
+
+            renderImg();
+
+            function renderImg(){
+
+                app.ajax('get',app.url('getSayList.php'),{page:pageCount,pageStart:pageResult},function(data){
+
+                    var obj = data,str = '';
+
+                    console.log(obj);
+
+                    var model = $('#model-1').clone();
+
+                    for(var i=0;i<obj.length;i++){
+
+                        if(obj[i].statusCode == 404){continue;}
+
+                        var imgListModel = $("#model-1-a").clone();
+
+                        //每一条说说的所有图片字符串
+                        var imgStr = '';
+
+                        //******************************************
+                        //设置相应的CSS属性
+                        var lineNum = obj[i].imgArrPath.length;
+
+                        var w = $('#model-1').find('.img-item').css('width');
+
+                        w = w.substr(0,w.length-2);
+
+                        var liw = liy = (w-2*(obj[i].imgArrPath.length-1))/lineNum;
+
+                        if(lineNum == 1){liy = liw/2};
+
+                        imgListModel.find('.img-list').css({
+
+                            width:liw + 'px',
+
+                            height:liy + 'px',
+                        });
+                        //******************************************
+
+                        //向内存中的子模板循环插入图片
+                        for(var j=0;j<obj[i].imgArrPath.length;j++){
+
+                            //imgListModel.find('img').prop('src',"img/"+obj[i].imgArrPath[j]);
+
+                            imgListModel.find("[data-name='imgList']").css('background-image',"url("+app.imgUrl("say/"+obj[i].imgArrPath[j])+")");
+
+                            imgStr += imgListModel.html();
+
+                        }
+
+                        //列表id
+                        model.find('.say').attr('data-id',obj[i].id);
+
+                        //名字
+                        model.find("[data-name='name']").text(obj[i].name);
+
+                        //时间
+                        model.find("[data-name='time']").text(obj[i].time);
+
+                        //头像
+                        model.find("[data-name='headPath']").css('background-image',"url("+app.imgUrl(obj[i].headPath)+")");
+
+                        //内容
+                        model.find("[data-name='text']").text(obj[i].text);
+
+                        //向内存中的dom模板插入图片数列表
+                        model.find("[data-name='imgArrPath']").html(imgStr);
+
+                        //============================================================================
+
+                        //获取刚插入的图片列表根据数量设置间距
+                        var liNum = model.find("[data-name='imgArrPath']").find('li');
+
+                        if(liNum.length>1){
+                            //margin-left边距
+                            liNum.each(function(index,obj){
+
+                                if(index%liNum.length!=0){
+
+                                    obj.style.marginLeft = "2px";
+
+                                }
+                            })
+
+                            //根据图片比例填充
+                            liNum.find('img').each(function(index,obj){
+
+                                if(obj.width<obj.height){
+
+                                    obj.style.width = "100%";
+
+                                }else{
+
+                                    obj.style.height = "100%";
+                                }
+                            })
+
+                        }else{  liNum.find('img').css('max-width','100%'); }
+
+                        str +=  model.html();
+                    }
+
+                    if(str == ''){
+
+                        com.prompt(0,'没有啦！')
+
+                    }else{
+
+                        $('.load-button').before(str);
+                    }
+
+                    return pageResult = pageResult + pageCount;
+                },1)
+            }
+
+            //**************************************************
+
+            $('.load-button').on('tap',function(){
+
+                renderImg();
+
+            });
+
+
+            //添加事件
+            $('.container').on('tap','.img-list',function(){
+
+                var imgArrPath = [],nowIdex = $(this).index();
+
+                var pageImgObj = $(this).parent('.img-item').find('.img-list');
+                                
+                pageImgObj.each(function(index,obj){
+                    
+                    imgArrPath.push($(obj).css('backgroundImage').match(/http.+(jpg)|(png)/)[0])
+                    
+                })
+              
+                var dataImg ={
+                    displayActionButton:false,
+                    displayNavArrows:true,
+                    enableGrid:true,
+                    //startOnGrid:true,
+                    startIndex:nowIdex,
+                    data:imgArrPath
+                    };
+
+                var jsonImg=JSON.stringify(dataImg);
+                    uexImage.openBrowser(jsonImg);                 
+
+                //com.pageImageEvent(pageImgObj,this,bimObj);
+
+                //pageImgObj:要显示图片总数对象集合
+
+            })
+
+
+        })
+    </script>
+
+</body>
+</html>

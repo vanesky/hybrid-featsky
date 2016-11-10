@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FEATSKY Best-1.0</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="featsky,featsky博客,641151096"/>
+    <meta name="description" content="featsky的个人博客,641151096的个人博客"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/art.css">
+    <link rel="stylesheet" href="component/prompt/com-prompt.css">
+</head>
+<body>
+
+    <header>
+        <img class="back" src="img/fixed/arrow.png" alt="">
+        <h4 class="titles">搜索结果</h4>
+    </header>
+
+    <!--<section id="search-model" class="fx-row-s">
+        <img class="search-img va-c" src="img/fixed/search.png" alt="">
+        <input name="search" type="text" placeholder="搜索..">
+    </section>-->
+
+    <div class="container" style="top:50px;">
+        <!--列表模板填充-->
+    </div>
+
+    <!--===============================================================-->
+
+
+    <!--列表模板*********************************************************-->
+    <div id="model-1" class="hide">
+        <div class="article-item">
+            <div data-name="imgPath" class="list-bg"></div>
+            <h5 data-name="title" class="tc mt10"></h5>
+            <p data-name="time" class="tc mt7 fr10 c6"></p>
+            <div class="tc mt15 c6">”</div>
+            <p data-name="text" class="pdl30 pdr30 c6"></p>
+        </div>
+    </div>
+    <!--*****************************************************************-->
+
+    <!--提示框组件-->
+    <div id="com-prompt">
+        <div class="prompt-main">
+            <h5 class="prompt-tit">提示</h5>
+            <div class="prompt-text">0</div>
+            <ul class="prompt-item fx-row-a">
+                <li class="prompt-button bc-db c6">取消</li>
+                <li class="prompt-button c-ba cf">确定</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="src/lib/appcan.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="src/js/ajax.js"></script>
+
+    <script src="component/load/load.js"></script>
+    <script src="component/articleDetail/art_detail.js"></script>
+    <script src="component/prompt/com_prompt.js"></script>
+    <script>
+        $(function(){
+
+            var searchResult = localStorage.getItem('search');
+
+            if(searchResult){
+
+                renderData();
+
+            }
+
+            function renderData(){
+
+                app.ajax('get',app.url('getSearchList.php'),{str:searchResult},function(data){
+
+                    var obj = data,str = '';
+
+                    var model = $('#model-1').clone();
+
+                    for(var i=0;i<obj.length;i++){
+
+                        if(obj[i].statusCode == 404){continue;}
+
+                        //列表id
+                        model.find('.article-item').attr('data-id',obj[i].id);
+
+                        //列表背景
+                        model.find("[data-name='imgPath']").css('background-image',"url("+app.imgUrl('art/'+obj[i].imgPath)+")");
+
+                        //标题
+                        model.find("[data-name='title']").text(obj[i].title);
+
+                        //时间
+                        model.find("[data-name='time']").text(obj[i].time);
+
+                        //内容
+                        model.find("[data-name='text']").text(obj[i].text);
+
+                        str +=  model.html();
+                    }
+
+                    if(str == ''){
+
+                        com.prompt(0,'未搜索到结果!')
+
+                    }else{
+
+                        $('footer').before(str);
+
+                    }
+
+                    //return pageResult = pageResult + pageCount;
+
+                })
+            }
+
+            //=================================================================
+            //详情落地页面高度
+            var w = $(window).height();
+
+            $('#art-main').css('height',w-50 + 'px');
+
+
+            //列表事件
+            $('.container').on('tap','.article-item',function(){
+
+                var id = $(this).attr('data-id');               
+                //hybrid
+                localStorage.setItem('artcleId',id);
+
+                appcan.window.open({
+                     
+                    name:'article_detail',
+                     
+                    data:'article_detail.html',
+                     
+                    dataType:'0',
+                     
+                    aniId:"2",
+                    
+                    type:'256',
+                    
+                    animDuration:"200"
+                                                              
+                });
+
+                //$('.com-art-toggle').css('-webkit-transform','translateX(-100%)');
+
+            })
+
+
+            //返回
+            $('.back').on('tap',function(){
+
+                appcan.window.close(1,200)
+
+            })
+
+        })
+    </script>
+</body>
+</html>

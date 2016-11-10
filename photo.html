@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FEATSKY Best-1.0</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="featsky,featsky博客,641151096"/>
+    <meta name="description" content="featsky的个人博客,641151096的个人博客"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/photo.css">
+    <link rel="stylesheet" href="component/prompt/com-prompt.css">
+</head>
+<body>
+
+    <header>
+        <!--<img id="logo" src="img/logo.png" alt="">-->
+        <ul class="menu-list fx-col-b">
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <h4 class="titles">相册</h4>
+    </header>
+
+    <nav class="nav-tit clearfix">
+        <ul class="nav-item">
+            <li class="item-list fl">
+                <p class="list-tit">最近</p>
+                <div class="list-line c-ba"></div>
+            </li>
+            <li class="item-list fr">
+                <p class="list-tit">图册</p>
+                <div class="list-line c-ba hide"></div>
+            </li>
+            <!--<li class="item-list fx-col-e">
+                <h4>散文</h4>
+                <div class="list-line"></div>
+            </li>-->
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <div id="channel-latest">
+            <!--模板填充-->
+        </div>
+
+        <div id="channel-all">
+            <ul data-name="imgPath" class="clearfix">
+                <!--模板填充-->
+            </ul>
+        </div>
+        <div class="load-button mt40">加载更多</div>
+    </div>
+
+
+
+    <!--最近模板*****************************-->
+    <div id="model-1" class="hide">
+        <h3 data-name="time" class="date-tit"></h3>
+        <ul data-name="imgPath" class="clearfix">
+
+        </ul>
+    </div>
+    <!--(子模板)*****************************-->
+    <div id="model-1-a" class="hide">
+        <li class="img-list"></li>
+    </div>
+
+
+    <script src="src/lib/appcan.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="component/load/load.js"></script>
+    <script src="component/prompt/com_prompt.js"></script>
+    <script src="src/js/ajax.js"></script>
+    <script>
+
+        $(function(){
+
+            var pageResult = 0,pageCount = 2,w = $(window).width();
+
+            var latestObj = $('#channel-latest'),allObj = $('#channel-all');
+
+            //默认进入最近模块
+            renderImg();
+
+            //图片渲染
+            function renderImg(){
+
+                //图片间隔宽度
+                imgListWidth(2,3);
+
+                app.ajax('get',app.url('getImgList.php'),{page:pageCount,pageStart:pageResult},function(data){
+
+                    var obj = data,str = '',page = '';
+
+                    var model = $('#model-1').clone();
+
+                    var imgListModel = $("#model-1-a").clone();
+
+                    for(var i=0;i<obj.length;i++){
+
+                        var imgStr = '';
+
+                        if(obj[i].statusCode == 404){continue;}
+
+                        for(var j=0;j<obj[i].data.length;j++){
+
+                            //时间
+                            model.find("[data-name='time']").text(obj[i].data[j].time);
+
+                            imgListModel.find('.img-list').css('background-image',"url("+app.imgUrl('photo/'+obj[i].data[j].imgPath)+")").attr('data-id',obj[i].data[j].id);
+
+                            imgStr += imgListModel.html();
+                        }
+
+                        //向内存中的dom模板插入图片数列表
+                        model.find("[data-name='imgPath']").html(imgStr);
+
+                        for(var k=0;k<model.find('.img-list').length;k++){
+
+                            if(k%3!=0){ model.find('.img-list').eq(k).css('margin-left',2 + 'px') }
+
+                        }
+
+                        //保存对象列表字符串到变量
+                        str +=  model.html();
+
+                        page = obj[i].page;
+                    }
+
+                    if(str == ''){
+
+                        com.prompt(0,'最近只有这些哦!');
+
+                        return;
+
+                    }else{
+
+                        latestObj.append(str);
+                    }
+
+                    return pageResult =  page;
+                },1)
+            }
+
+            //==================================================================
+
+            //图片大小和边距
+            function imgListWidth(param,num){
+
+                var liw = (w-param*(num-1))/num - 0.1;
+
+                $('#model-1-a').find('.img-list').css({
+
+                    width:liw + 'px',
+
+                    height:liw + 'px',
+
+                });
+            }
+
+            //边距(分别获取设置边距)
+            function imgListLeft(obj,param){
+
+                for(var i=0;i<obj.length;i++){
+
+                    if(i%3!=0){ obj.eq(i).css('margin-left',param + 'px') }
+
+                }
+            }
+
+            //初始化页面
+            function initPage(n){
+
+                pageCount = 2;
+
+                pageResult = 0;
+
+                pagesCount = 9;
+
+                pagesResult = 0;
+
+                n == 0 ?  latestObj.html('') : allObj.children("[data-name='imgPath']").html('');
+
+            }
+
+            //二级页面===========================================================
+
+
+            //页面图片列表事件
+            function pageEventTap(obj){
+
+                obj.on('tap','.img-list',function(){
+
+                    //最近|全部
+                    var pageImgObj = obj.find('.img-list');
+                    
+                    var _this = $(this)[0],nowIdex = '',imgArrPath = [];                   
+               
+                    pageImgObj.each(function(index,obj){
+                        
+                        if(_this == obj){nowIdex = index}
+                        
+                        imgArrPath.push($(obj).css('backgroundImage').match(/http.+(jpg)|(png)/)[0]);
+                        
+                    })
+                    
+                var dataImg ={
+                    displayActionButton:false,
+                    displayNavArrows:true,
+                    enableGrid:true,
+                    //startOnGrid:true,
+                    startIndex:nowIdex,
+                    data:imgArrPath
+                    };
+
+                var jsonImg=JSON.stringify(dataImg);
+                    uexImage.openBrowser(jsonImg);                     
+
+                    //com.pageImageEvent(pageImgObj,this,bimObj)
+
+                })
+            }
+
+            pageEventTap(latestObj);
+
+            pageEventTap(allObj);
+
+
+            //全部模块********************************************************
+
+            var pagesResult = 0,pagesCount = 9;
+
+            function renderAllImg(){
+
+                imgListWidth(2,3)
+
+                app.ajax('get',app.url('getImgListAll.php'),{page:pagesCount,pageStart:pagesResult},function(data){
+
+                    var obj = data,imgStr='';
+
+                    var imgListModel = $("#model-1-a").clone();
+
+                    for(var i=0;i<obj.length;i++){
+
+                        if(obj[i].statusCode == 404){continue;}
+
+                        imgListModel.find('.img-list').css('margin-left','');
+
+                        imgListModel.find('.img-list').css('background-image',"url("+app.imgUrl('photo/'+obj[i].imgPath)+")").attr('data-id',obj[i].id);
+
+                        if(i%3!=0){ imgListModel.find('.img-list').css('margin-left',2 + 'px') }
+
+                        imgStr += imgListModel.html();
+
+                    }
+
+                    if(imgStr == ''){
+
+                        com.prompt(0,'已没有更多内容!')
+
+                    }else{
+
+                        //将变量字符串插入真实dom
+                        allObj.children("[data-name='imgPath']").append(imgStr);
+
+                    }
+
+                    pagesResult += 9;
+                },1);
+
+            }
+
+            //最近模块和全部模块切换
+            $('.item-list').on('tap',function(){
+
+                var index = $(this).index();
+
+                var lineObj = $('.list-line');
+
+                lineObj.addClass('hide');
+
+                allObj.css('opacity',0).addClass('hide');
+
+                latestObj.css('opacity',0).addClass('hide');
+                //$('#channel-all,#channel-latest').css('opacity',0).addClass('hide');
+
+                if(index == 0 ){
+
+                    initPage(0);
+
+                    renderImg();
+
+                    latestObj.removeClass('hide').animate({'opacity':1})
+
+                    lineObj.eq(0).removeClass('hide');
+
+                }else{
+
+                    initPage(1);
+
+                    renderAllImg();
+
+                    allObj.removeClass('hide').animate({'opacity':1});
+
+                    lineObj.eq(1).removeClass('hide');
+
+                }
+
+            })
+
+            //加载更多
+            $('.load-button').on('tap',function(){
+
+                if(latestObj.css('display') == 'none'){
+
+                    renderAllImg()
+
+                }else{ renderImg(); }
+
+            })
+
+
+        })
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

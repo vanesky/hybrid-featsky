@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FEATSKY Best-1.0</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="featsky,featsky博客,641151096"/>
+    <meta name="description" content="featsky的个人博客,641151096的个人博客"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/movie_detail.css">
+    <link rel="stylesheet" href="component/prompt/com-prompt.css">
+</head>
+<body>
+
+    <div class="com-movie-detail">
+        <header>
+            <img class="back" src="img/fixed/arrow.png" alt="">
+            <h4 class="titles">视频详情</h4>
+        </header>
+
+        <section id="movie" class="">
+            <video id="video" src="video/justin.mp4" controls="controls">
+                                您的浏览器不支持 video 标签。
+            </video>
+
+            <div id="movie-main">
+                <ul class="w90 fx-row-b c9">
+                    <li>
+                        <h5 data-name="title" class="c10">标题</h5>
+                        <!--<div class="mt5">
+                            <img class="source-span" src="img/earth.png" alt="">
+                            <span class="source-img">featsky</span>
+                        </div>-->
+                    </li>
+                    <li data-name="time">2001-00-00</li>
+                </ul>
+                <p class="w90 mt10 c6">
+                    <span>简介:</span>
+                    <span data-name="description">暂无描述</span>
+                </p>
+            </div>
+        </section>
+
+        <div class="container mt30 hide"></div>
+    </div>
+
+
+    <script src="src/lib/appcan.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="component/prompt/com_prompt.js"></script>
+    <script src="src/js/ajax.js"></script>
+    <script src="component/movieDetail/movie_detail.js"></script>
+    <script>
+        $(function(){
+
+            var id = localStorage.getItem('artcleId');
+            
+            com.renderMovie(id);
+
+            $('.back').on('tap',function(){
+                
+                appcan.window.close(1,200)
+                
+            })
+
+
+        })
+    </script>
+
+</body>
+</html>

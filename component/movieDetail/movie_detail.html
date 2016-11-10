@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FEATSKY Best-1.0</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="featsky,featsky博客,641151096"/>
+    <meta name="description" content="featsky的个人博客,641151096的个人博客"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="../../src/css/base.css">
+    <link rel="stylesheet" href="../../src/css/movie_detail.css">
+</head>
+<body>
+
+    <header>
+        <!--<img id="logo" src="img/logo.png" alt="">-->
+        <!--<ul class="nav-list fx-col-b">
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>-->
+        <h4 class="titles">视频详情</h4>
+    </header>
+
+    <section id="movie">
+        <video id="video" src="" controls="controls">
+            您的浏览器不支持 video 标签。
+        </video>
+
+        <div id="movie-main">
+            <ul class="w90 fx-row-b c9">
+                <li>
+                    <h5 data-name="title" class="c10">关于防守打法</h5>
+                    <!--<div class="mt5">
+                        <img class="source-span" src="img/earth.png" alt="">
+                        <span class="source-img">featsky</span>
+                    </div>-->
+                </li>
+                <li data-name="time">2016-02-15</li>
+            </ul>
+            <p class="w90 mt10 c6">
+                <span>简介:</span>
+                <span data-name="description">第三方斯蒂芬斯蒂芬斯蒂芬</span>
+            </p>
+        </div>
+    </section>
+
+    <script src="../../src/lib/zepto.min.js"></script>
+    <script src="../../src/js/common.js"></script>
+    <script src="../../src/js/ajax.js"></script>
+    <script src="../load/load.js"></script>
+    <script>
+        $(function(){
+
+            app.ajax('get',app.url('getMovieDetail.php'),{id:2},function(data){
+
+                var obj = data;
+
+                $('#video').attr('src','../../video/'+obj.moviePath);
+
+                $("[data-name]").each(function(index,val){
+
+                    var valObj = $(val);
+
+                    var name = valObj.attr('data-name');
+
+                    valObj.text(obj[name]);
+                })
+            },false,$('body'))
+
+
+        })
+    </script>
+</body>
+</html>

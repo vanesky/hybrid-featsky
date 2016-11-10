@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FEATSKY Best-1.0</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="featsky,featsky博客,641151096"/>
+    <meta name="description" content="featsky的个人博客,641151096的个人博客"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/art_detail.css">
+    <link rel="stylesheet" href="component/prompt/com-prompt.css">
+</head>
+<body>
+
+    <header>
+        <img class="back" src="img/fixed/arrow.png" alt="">
+        <h4 class="titles">文章详情</h4>
+    </header>
+
+    <div class="container">
+
+        <section id="art-item" class="pd15 pdb30" style="top:0px;">
+
+            <h3 data-name="title" class="fw">宇宙最诡异时空 人类所有定律竟全部失效！</h3>
+            <div class="mt7 c6">
+                <span data-name="author">Featsky</span>
+                &nbsp;
+                <span data-name="time">2015.02.16</span>
+            </div>
+
+            <div id="content">
+                <!--<p></p>
+                <img src="img/1.jpg" alt="">
+                <p></p>-->
+            </div>
+        </section>
+
+    </div>
+
+
+    <script src="src/lib/appcan.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="component/prompt/com_prompt.js"></script>
+    <script src="src/js/ajax.js"></script>
+    <script src="component/articleDetail/art_detail.js"></script>
+    <script>
+        $(function(){
+
+            var id = localStorage.getItem('artcleId');
+
+                com.renderArticle(id);
+
+            $('.back').on('tap',function(){
+
+                appcan.window.close(1,200);
+
+            })
+
+
+        })
+    </script>
+
+</body>
+</html>
+
+
+
+
+

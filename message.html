@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FEATSKY Best-1.0</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="featsky,featsky博客,641151096"/>
+    <meta name="description" content="featsky的个人博客,641151096的个人博客"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/message.css">
+    <link rel="stylesheet" href="component/prompt/com-prompt.css">
+    <link rel="stylesheet" href="component/load/load.css">
+</head>
+<body>
+
+    <header>
+        <!--<img id="logo" src="img/logo.png" alt="">-->
+        <ul class="menu-list fx-col-b">
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <h4 class="titles">留言</h4>
+    </header>
+
+    <div id="mes-input">
+        <img class="img-edit va-c" src="img/fixed/edit.png" alt="">
+        <span class="ml5 va-c">留言一番 . .</span>
+    </div>
+
+    <div class="container" style='overflow: hidden;'>
+        <section id="mes-item">
+            <div class="item-list hide">
+                <div class="img-head bs-b dp-ib va-c"></div>
+                <div class="dp-ib va-c ml3">
+                    <h5>Featsky</h5>
+                    <p class="fr10 c6 mt1">2016-02-15</p>
+                </div>
+                <p class="item-text">你这是多少fffffff放松放松的方式的范德萨发生的发送到发送到</p>
+            </div>
+
+        </section>
+        <div class="load-button">查看更多</div>
+    </div>
+
+
+    <!--=================列表模板===================-->
+    <div id="model-1" class="hide">
+        <div data-name="id" class="item-list">
+            <div data-name="headPath" class="img-head bg-fill dp-ib"></div>
+            <!--<img class="img-head va-c" src="img/1.jpg" alt="">-->
+            <div class="item-mes dp-ib ml3">
+                <h5 data-name="name"></h5>
+                <p data-name="time" class="fr10 c9 mt1"></p>
+            </div>
+            <p data-name="text" class="item-text"></p>
+        </div>
+    </div>
+    <!--==============================================-->
+
+
+    <script src="src/lib/appcan.js"></script>
+    <script src="src/js/common.js"></script>
+    <script src="component/prompt/com_prompt.js"></script>
+    <script src="component/load/load.js"></script>
+    <script src="src/js/ajax.js"></script>
+    <script>
+        $(function(){
+
+            var pageResult = 0,pageCount = 4;
+
+            renderInfo();
+
+            //加载更多
+            $('.load-button').on('tap',function(){
+
+                renderInfo();
+            });
+            /*==================================================*/
+  
+            //点击留言事件
+            $('#mes-input').on('tap',function(){
+                
+                appcan.window.open({
+                     
+                    name:'message_info',
+                     
+                    data:'message_info.html',
+                     
+                    dataType:'0',
+                     
+                    aniId:"2",
+                    
+                    type:'256',
+                    
+                    animDuration:"200"
+                                                              
+                }); 
+
+            });
+
+            //**********************************************************
+
+            function renderInfo(){
+
+                app.ajax('get',app.url('getMesList.php'),{page:pageCount,pageStart:pageResult},function(data){
+
+                    var obj = data,str = '';
+
+                    //console.log(obj);
+
+                    var model = $('#model-1').clone();
+
+                    for(var i=0;i<obj.length;i++){
+
+                        if(obj[i].statusCode == 404){continue;}
+
+                        //列表id
+                        model.find("[data-name='id']").attr('data-id',obj[i].id);
+
+                        //列表背景
+                        model.find("[data-name='headPath']").css('background-image',"url("+app.imgUrl('user/'+obj[i].headPath)+")");
+
+                        //标题
+                        model.find("[data-name='name']").text(obj[i].name);
+
+                        //时间
+                        model.find("[data-name='time']").text(obj[i].time);
+
+                        //内容
+                        model.find("[data-name='text']").text(obj[i].text);
+
+                        str +=  model.html();
+                    }
+
+                    if(str == ''){
+
+                        com.prompt(0,'已没有更多留言');
+
+                    }else{
+
+                        $('#mes-item').append(str);
+
+                    }
+
+                    return pageResult = pageResult + pageCount;
+                },1)
+            }
+        })
+    </script>
+
+</body>
+</html>
